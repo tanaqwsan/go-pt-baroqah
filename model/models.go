@@ -6,6 +6,7 @@ import (
 
 type Employee struct {
 	Name          string `json:"name" form:"name"`
+	NIP           string `json:"nip" form:"nip"`
 	Address       string `json:"address" form:"address"`
 	Position      int    `json:"position" form:"position"`
 	BirthDate     int    `json:"birth_date" form:"birth_date"`
@@ -27,6 +28,7 @@ type Position struct {
 type Salary struct {
 	EmployeeID  int `json:"employee_id" form:"employee_id"`
 	Month       int `json:"month" form:"month"`
+	Year        int `json:"year" form:"year"`
 	BasicSalary int `json:"basic_salary" form:"basic_salary"`
 	Bonus       int `json:"bonus" form:"bonus"`
 	Fee         int `json:"fee" form:"fee"`

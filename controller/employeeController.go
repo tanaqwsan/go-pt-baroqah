@@ -49,6 +49,9 @@ func StoreEmployee(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid request body"))
 	}
 
+	//randomize the NIP
+	employee.NIP = res.RandomNIP()
+
 	if err := config.DB.Create(&employee).Error; err != nil {
 		log.Fatal(err)
 		return c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to store employee data"))

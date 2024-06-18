@@ -27,12 +27,12 @@ func Init() *echo.Echo {
 	//Manage Position
 	e.POST("/positions", controller.StorePosition)
 	e.GET("/positions", controller.IndexPosition)
-	e.GET("/positions/:id", controller.ShowPosition)
+	e.GET("/positions/:level", controller.ShowPosition)
 	e.PUT("/positions/:level", controller.UpdatePositionByLevel)
 	e.DELETE("/positions/:level", controller.DeletePositionByLevel)
 
 	//Manage Salary
-	e.POST("/salaries", controller.StoreSalary)
+	e.POST("/salaries/:id/employee/:month/:year", controller.StoreSalary)
 	e.GET("/salaries", controller.IndexSalary)
 	e.GET("/salaries/:id", controller.ShowSalary)
 	e.PUT("/salaries/:id", controller.UpdateSalary)
