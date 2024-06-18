@@ -49,9 +49,25 @@ func ShowSalary(c echo.Context) error {
 // dari gaji pokok, dan jabatan staff 30% dari gaji pokok./*
 func StoreSalary(c echo.Context) error {
 	var salary model.Salary
-	if err := c.Bind(&salary); err != nil {
-		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid request body"))
+
+	employeeId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid ID"))
 	}
+
+	month, err := strconv.Atoi(c.Param("month"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid ID"))
+	}
+
+	year, err := strconv.Atoi(c.Param("year"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid ID"))
+	}
+
+	salary.EmployeeID = employeeId
+	salary.Month = month
+	salary.Year = year
 
 	// Check if month is valid
 	if salary.Month < 1 || salary.Month > 12 {
@@ -60,7 +76,7 @@ func StoreSalary(c echo.Context) error {
 
 	// Check if salary of the employee in the same month already exists
 	var existingSalary model.Salary
-	if err := config.DB.Where("employee_id = ? AND month = ?", salary.EmployeeID, salary.Month).First(&existingSalary).Error; err == nil {
+	if err := config.DB.Where("employee_id = ? AND month = ? AND year = ?", salary.EmployeeID, salary.Month, salary.Year).First(&existingSalary).Error; err == nil {
 		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Salary data for the employee in the same month already exists"))
 	}
 
@@ -151,7 +167,7 @@ func IndexSalaryByEmployee(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, utils.ErrorResponse("Empty data"))
 	}
 
-	response := res.ConvertIndexSalary(salaries)
+	response := res.ConvertIndexSalarySortByMonth(salaries)
 
 	return c.JSON(http.StatusOK, utils.SuccessResponse("Salary data successfully retrieved", response))
 

@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func IndexPosition(c echo.Context) error {
@@ -29,14 +28,12 @@ func IndexPosition(c echo.Context) error {
 }
 
 func ShowPosition(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid ID"))
-	}
+	//Get position by level
+	level := c.Param("level")
 
 	var position model.Position
 
-	if err := config.DB.First(&position, id).Error; err != nil {
+	if err := config.DB.Where("level = ?", level).First(&position).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to retrieve position"))
 	}
 
